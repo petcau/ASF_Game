@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.idea/
+.vscode/
+*.log
+.DS_Store
+.edge-test*/
+.chrome-test*/
+preview-*.png
+site-bundle.tar.gz
