@@ -6,17 +6,34 @@
     <meta name="theme-color" content="#163f35" />
     <meta name="description" content="Abelhas Nativas: Meliponicultura — protótipo jogável." />
     <title>Abelhas Nativas: Meliponicultura</title>
+    <style>
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #0b251f; }
+      .boot-pending #app { visibility: hidden; }
+      .start-screen {
+        position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 28px;
+        background: radial-gradient(circle at 50% 35%, #397052 0%, #173f34 48%, #081d18 100%);
+      }
+      .start-screen-content { display: grid; justify-items: center; gap: clamp(25px, 5vh, 52px); }
+      .start-screen-logo { display: block; width: min(680px, 82vw); height: auto; }
+      .start-screen button {
+        min-width: 190px; padding: 15px 34px; border: 2px solid #fff0a5; border-radius: 16px;
+        color: #18362d; background: linear-gradient(180deg, #ffe477, #f4bd35);
+        font: 900 20px system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em;
+      }
+    </style>
   </head>
-  <body>
+  <body class="boot-pending">
+    <section id="start-screen" class="start-screen" aria-label="Tela inicial">
+      <div class="start-screen-content">
+        <img class="start-screen-logo" src="./imagens/logo.webp" alt="Abelhas Nativas — Meliponicultura" />
+        <button id="start-game-button" type="button">Jogar</button>
+      </div>
+    </section>
     <div id="app">
       <header class="topbar">
         <button id="back-button" class="icon-button hidden" type="button" aria-label="Voltar ao sítio">←</button>
         <div class="brand">
-          <span class="brand-mark" aria-hidden="true">⬡</span>
-          <div>
-            <strong>Abelhas Nativas</strong>
-            <span>Meliponicultura</span>
-          </div>
+          <img class="brand-logo" src="./imagens/logo.webp" alt="Abelhas Nativas — Meliponicultura" />
         </div>
         <button id="menu-button" class="icon-button" type="button" aria-label="Abrir informações">ⓘ</button>
       </header>
@@ -27,11 +44,55 @@
           <span class="bee-loader" aria-hidden="true">◆</span>
           Preparando o sítio…
         </div>
-        <section id="location-card" class="location-card" aria-live="polite">
-          <span id="location-kicker">Seu sítio</span>
-          <strong id="location-title">Primavera na Bahia</strong>
-          <p id="location-description">Toque nos locais destacados para explorar.</p>
-        </section>
+        <button id="edit-map-button" class="edit-map-button hidden" type="button">Posicionar objetos</button>
+        <div id="bee-flight-controls" class="bee-flight-controls">
+          <button id="play-map-button" class="play-map-button" type="button" disabled>▶ Play</button>
+          <button id="collection-mode-button" class="collection-mode-button" type="button">Marcar pontos de coleta (0)</button>
+          <label for="bee-speed">Velocidade
+            <span><input id="bee-speed" type="range" min="0.1" max="1" step="0.05" value="0.25" /><output id="bee-speed-label">0.25×</output></span>
+          </label>
+          <div class="bee-colony-summary" aria-live="polite">
+            <span>Caixas</span>
+            <div><span>1 módulo</span><strong id="bee-hive-small-summary">0</strong></div>
+            <div><span>2 módulos</span><strong id="bee-hive-medium-summary">0</strong></div>
+            <div><span>3 módulos</span><strong id="bee-hive-large-summary">0</strong></div>
+            <div class="summary-total"><span>Total de caixas</span><strong id="bee-hive-total-summary">0</strong></div>
+            <span>Abelhas</span>
+            <div><span>Total</span><strong id="bee-total-summary">0</strong></div>
+          </div>
+        </div>
+        <aside id="map-editor" class="map-editor hidden" aria-label="Editor de posições do mapa">
+          <div class="map-editor-heading">
+            <div>
+              <span>Modo de edição</span>
+              <strong>Posicionar objetos</strong>
+            </div>
+            <button id="close-map-editor" type="button" aria-label="Fechar editor">×</button>
+          </div>
+          <span class="editor-section-label">Adicionar ao mapa</span>
+          <div id="palette-tabs" class="palette-tabs" role="tablist" aria-label="Categorias de objetos"></div>
+          <div id="element-palette" class="element-palette"></div>
+          <label for="map-object-select">Objeto colocado</label>
+          <select id="map-object-select"></select>
+          <div class="coordinate-fields">
+            <label for="map-object-x">X <input id="map-object-x" type="number" min="40" max="1632" step="1" /></label>
+            <label for="map-object-y">Y <input id="map-object-y" type="number" min="40" max="901" step="1" /></label>
+          </div>
+          <label class="size-field" for="map-object-size">Tamanho
+            <span><input id="map-object-size" type="range" min="20" max="300" step="1" value="110" /><output id="map-object-size-label">110%</output></span>
+          </label>
+          <p>Arraste uma imagem até o mapa para colocar o objeto. Depois, arraste novamente para ajustar.</p>
+          <div class="map-editor-actions">
+            <button id="save-map-layout" class="primary-editor-button" type="button">Salvar mapa</button>
+            <button id="copy-map-layout" type="button">Copiar JSON</button>
+            <button id="duplicate-map-object" type="button">Duplicar selecionado</button>
+            <button id="lower-map-object" type="button">Colocar abaixo</button>
+            <button id="raise-map-object" type="button">Colocar acima</button>
+            <button id="delete-map-object" type="button">Excluir selecionado</button>
+            <button id="clear-map-layout" class="danger-editor-button" type="button">Remover todos</button>
+          </div>
+          <output id="map-editor-status" aria-live="polite"></output>
+        </aside>
       </main>
 
       <footer class="season-panel">
