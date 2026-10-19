@@ -12,9 +12,9 @@ import hiveLeftLargeUrl from '../../imagens/caixas_esquerda_3.webp?url';
 import hiveRightSmallUrl from '../../imagens/caixas_direita_1.webp?url';
 import hiveRightMediumUrl from '../../imagens/caixas_direita_2.webp?url';
 import hiveRightLargeUrl from '../../imagens/caixas_direita_3.webp?url';
-import jataiFlight1Url from '../../imagens/abelhas/jatai_1.webp?url';
-import jataiFlight2Url from '../../imagens/abelhas/jatai_2.webp?url';
-import jataiFlight3Url from '../../imagens/abelhas/jatai_3.webp?url';
+import jataiFlight1Url from '../../imagens/Abelhas/jatai_1.webp?url';
+import jataiFlight2Url from '../../imagens/Abelhas/jatai_2.webp?url';
+import jataiFlight3Url from '../../imagens/Abelhas/jatai_3.webp?url';
 
 export const assets = {
   site: siteUrl,
